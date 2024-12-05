@@ -64,6 +64,7 @@ public abstract class BaseController<T extends BaseEntity, S extends BaseService
     })
     public ResponseEntity<List<T>> findAll() {
         List<T> entities = service.findAll();
+
         return ResponseEntity.ok(entities);
     }
 

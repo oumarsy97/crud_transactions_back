@@ -1,5 +1,6 @@
 package sn.odc.crudtransaction.datas.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,17 +27,35 @@ public abstract class BaseEntity implements Serializable {
     private UUID id;
 
     @CreatedDate
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt =  LocalDateTime.now();
+    private LocalDate createdAt;
 
     @LastModifiedDate
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDate updatedAt;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    // Méthodes pour activer/désactiver l'entité
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDate.now();
+        }
+        if (updatedAt == null) {
+            updatedAt = LocalDate.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDate.now();
+    }
+
     public void activate() {
         this.isActive = true;
     }

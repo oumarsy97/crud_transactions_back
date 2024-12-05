@@ -32,7 +32,7 @@ logging:
               BasicBinder: TRACE
     org.springframework.web: DEBUG
 server:
-  port: 3000
+  port: 8000
 
 springdoc:
   api-docs:
